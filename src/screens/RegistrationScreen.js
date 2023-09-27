@@ -1,3 +1,5 @@
+import firebase from '../utils/firebase';
+
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import theme from '../styles/theme';
