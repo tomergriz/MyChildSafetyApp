@@ -1,35 +1,67 @@
-import firebase from '../utils/firebase';
 
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import theme from '../styles/theme';
+import auth from '@react-native-firebase/auth';
+
 
 const RegistrationScreen = ({ navigation }) => {
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const handleRegister = () => {
+        if (password !== confirmPassword) {
+            alert("Passwords don't match!");
+            return;
+        }
+
+        auth().createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                alert('Successfully registered!');
+            })
+            .catch((error) => {
+                alert(error.message);
+            });
+    };
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Register</Text>
             <TextInput
                 placeholder="Full Name"
+                value={fullName}
+                onChangeText={setFullName}
                 placeholderTextColor={theme.colors.placeholder}
                 style={styles.input}
             />
             <TextInput
                 placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
                 placeholderTextColor={theme.colors.placeholder}
                 style={styles.input}
             />
             <TextInput
                 placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
                 placeholderTextColor={theme.colors.placeholder}
                 secureTextEntry={true}
                 style={styles.input}
             />
             <TextInput
                 placeholder="Confirm Password"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
                 placeholderTextColor={theme.colors.placeholder}
                 secureTextEntry={true}
                 style={styles.input}
             />
+            <TouchableOpacity style={styles.button} onPress={handleRegister}>
+                <Text style={styles.buttonText}>Register</Text>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
                 <Text style={styles.buttonText}>Already have an account? Log in</Text>
             </TouchableOpacity>

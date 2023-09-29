@@ -1,18 +1,37 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import theme from '../styles/theme';
+import auth from '@react-native-firebase/auth';
 
 const LoginScreen = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = () => {
+    auth().signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        alert('Successfully logged in!');
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
       <TextInput
         placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
         placeholderTextColor={theme.colors.placeholder}
         style={styles.input}
       />
       <TextInput
         placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
         placeholderTextColor={theme.colors.placeholder}
         secureTextEntry={true}
         style={styles.input}
@@ -20,10 +39,13 @@ const LoginScreen = ({ navigation }) => {
       <TouchableOpacity>
         <Text style={styles.linkText}>Forgot Password?</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.buttonText}>Register</Text>
+        <Text style={styles.buttonText}>Don't have an account? Register</Text>
       </TouchableOpacity>
     </View>
   );
